@@ -162,6 +162,16 @@ namespace FlightSimulator.Views
 
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+
+        }
+
         private void Knob_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             Knob.ReleaseMouseCapture();
