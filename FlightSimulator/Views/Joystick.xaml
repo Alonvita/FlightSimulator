@@ -210,7 +210,7 @@
         </TabItem>
         <TabItem Header="Auto Pilot">
             <Grid Background="#FFE5E5E5">
-                <TextBox x:Name="TextBox" Margin="10,10,10,40" TextWrapping="Wrap" Text="Enter a set of commands here :)" BorderThickness="1.5" BorderBrush="Black"/>
+                <TextBox x:Name="TextBox" Margin="10,10,10,40" TextWrapping="Wrap" Text="Set of commands will be executed through here" BorderThickness="1.5" BorderBrush="Black"/>
                 <Button x:Name="Ok" Content="Button" HorizontalAlignment="Left" Margin="170,0,0,7" VerticalAlignment="Bottom" Width="100" Height="25"/>
                 <Button x:Name="Clear" Content="Button" HorizontalAlignment="Right" Margin="0,0,170,7" VerticalAlignment="Bottom" Width="100" Height="25"/>
             </Grid>
