@@ -1,18 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using FlightSimulator.Views;
+﻿using System.Windows;
+using System.Windows.Forms;
 
 namespace FlightSimulator
 {
@@ -21,21 +8,30 @@ namespace FlightSimulator
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void Start_Clicked(object sender, RoutedEventArgs e)
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            FlightBoard f = new FlightBoard(this);
-            this.AddChild(f);
-        }
+            const string message = "Are you sure that you would like to close the form?";
+            const string caption = "Closing the form...";
+            DialogResult result = 
+                System.Windows.Forms.MessageBox.Show(message, caption,
+                                                     MessageBoxButtons.YesNo,
+                                                     MessageBoxIcon.Question);
 
-        private void Exit_Clicked(object sender, RoutedEventArgs e)
-        {
-            // Close the window
-            Close();
+            // If the no button was pressed ...
+            if (result == System.Windows.Forms.DialogResult.No)
+            {
+                // cancel the closure of the form.
+                e.Cancel = true;
+            }
+            else
+                MainWindowVMSingelton.Instance.ExitCommand.Execute(null);
+
         }
     }
 }
