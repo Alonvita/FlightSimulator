@@ -1,5 +1,4 @@
-﻿using FlightSimulator.Model;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
@@ -7,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace FlightSimulator
+namespace FlightSimulator.Model
 {
     public class TcpServer : IServer
     {
