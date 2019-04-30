@@ -5,7 +5,11 @@ using System.Net.Sockets;
 
 namespace FlightSimulator.Model
 {
-    //Helper must always be static
+    /// <summary>
+    /// TcpServerUtils.
+    /// 
+    /// A static class providing TCPServer with outter utility specs needed.
+    /// </summary>
     public static class TcpServerUtils
     {
         //get tcp state
