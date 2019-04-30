@@ -1,14 +1,10 @@
-﻿using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using FlightSimulator.Model;
+﻿using System.ComponentModel;
 
 namespace FlightSimulator.Model
 {
-    public interface IServer
+    interface IServer : INotifyPropertyChanged
     {
-        void Run(int port);
-        void Disconnect();
+
+        void RunServer(int port);
     }
 }

@@ -1,58 +1,103 @@
 ﻿using FlightSimulator.Model;
 using System;
+using System.ComponentModel;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 
-namespace FlightSimulator.Model
+namespace FlightSimulator
 {
-    class TcpServer : IServer
+    public class TcpServer : IServer
     {
-        public TcpClient _tcpClient = null;
-        public NetworkStream _netStream = null;
-        public CommandHandler _commandHandler = null;
-
-        public TcpServer(CommandHandler ch) { this._commandHandler = ch; }
-        public void Run(int port)
+        private int port;
+        private Thread thread = null;
+        private string _data;
+        //Notify about data from the simulator
+        public string Data
         {
-            var listener = new TcpListener(IPAddress.Any, port);
-            Console.WriteLine("Waiting for connection.....");
+            get { return _data; }
+            set { _data = value; NotifyPropertyChanged("Data"); }
+        }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void RunServer(int port)
+        {
+            this.port = port;
             try
             {
-                listener.Start();
-                Thread thread = new Thread(() => {
-                    while (true)
-                    {
-                        _tcpClient = listener.AcceptTcpClient();
-                        if (this._commandHandler != null)
-                            this._commandHandler.Execute(this);
-                        else
-                            throw this.NotImplementedException();
-                    }
-                });
+                // open the thread that the commands will be on a different thread
+                thread = new Thread(paradicat);
+                thread.IsBackground = true;
                 thread.Start();
             }
             catch (Exception e)
             {
-                Disconnect();
                 Console.WriteLine(e.Message);
             }
-            finally
+        }
+
+        private void paradicat(object obj)
+        {
+            TcpClient tcpclient = null;
+            NetworkStream netstream = null;
+            var listener = new TcpListener(IPAddress.Any, port);
+            listener.Start();
+            tcpclient = listener.AcceptTcpClient();
+            netstream = tcpclient.GetStream();
+            Console.WriteLine("The simulator is connected!");
+            while (true)
             {
-                Disconnect();
+                try
+                {
+                    if (TcpServerUtils.GetState(tcpclient) == System.Net.NetworkInformation.TcpState.Closed)
+                    {
+                        Console.WriteLine("Client disconnected gracefully");
+                        break;
+                    }
+
+
+                    Data = Read(netstream);
+                }
+                catch (ObjectDisposedException)
+                {
+                    Console.WriteLine("netstream has died");
+                }
             }
+
+            tcpclient.Close();
+            netstream.Close();
+            listener.Stop();
+            tcpclient.Dispose();
+            netstream.Dispose();
         }
 
-        private Exception NotImplementedException()
+        //check if the tcp connection is closed
+        private bool IsDisconnected(TcpClient tcp)
         {
-            throw new NotImplementedException();
+            if (tcp.Client.Poll(0, SelectMode.SelectRead))
+            {
+                byte[] buff = new byte[1];
+                if (tcp.Client.Receive(buff, SocketFlags.Peek) == 0)
+                    return true;
+            }
+            return false;
         }
 
-        public void Disconnect()
+        private void NotifyPropertyChanged(string v)
         {
-            _netStream.Close();
-            Client.Close();
+            if (this.PropertyChanged != null)
+                this.PropertyChanged(this, new PropertyChangedEventArgs(v));
+        }
+        //Read data stream and decode is
+        private string Read(NetworkStream netstream)
+        {
+            byte[] buffer = new byte[1024];
+            int dataread = netstream.Read(buffer, 0, buffer.Length);
+            string stringread = Encoding.UTF8.GetString(buffer, 0, dataread);
+            return stringread;
         }
     }
 }
