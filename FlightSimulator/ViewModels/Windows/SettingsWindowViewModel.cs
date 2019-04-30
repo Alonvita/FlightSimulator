@@ -16,7 +16,7 @@ namespace FlightSimulator.ViewModels.Windows
             m_model = model;
         }
 
-        public void setWindow(Window w)
+        public void SetWindow(Window w)
         {
             m_window = w;
         }
@@ -31,7 +31,7 @@ namespace FlightSimulator.ViewModels.Windows
             }
         }
 
-        public int FlightCommandPort
+        public int FlightCommandPortProperty
         {
             get { return m_model.FlightCommandPort; }
             set
@@ -41,7 +41,7 @@ namespace FlightSimulator.ViewModels.Windows
             }
         }
 
-        public int FlightInfoPort
+        public int FlightInfoPortProperty
         {
             get { return m_model.FlightInfoPort; }
             set
@@ -64,13 +64,14 @@ namespace FlightSimulator.ViewModels.Windows
         }
 
         #region Commands
-        #region ClickCommand
-        private ICommand _clickCommand;
-        public ICommand ClickCommand
+        #region OnClickCommand
+
+        private ICommand m_OnClickCommand;
+        public ICommand OnClickCommand
         {
             get
             {
-                return _clickCommand ?? (_clickCommand = new CommandHandler(() => OnClick()));
+                return m_OnClickCommand ?? (m_OnClickCommand = new CommandHandler(() => OnClick()));
             }
         }
         private void OnClick()
@@ -80,16 +81,16 @@ namespace FlightSimulator.ViewModels.Windows
         }
         #endregion
 
-        #region CancelCommand
-        private ICommand _cancelCommand;
-        public ICommand CancelCommand
+        #region OnCancelCommand
+        private ICommand m_OnCancelCommand;
+        public ICommand OnCancelCommand
         {
             get
             {
-                return _cancelCommand ?? (_cancelCommand = new CommandHandler(() => OnCancel()));
+                return m_OnCancelCommand ?? (m_OnCancelCommand = new CommandHandler(() => Cancel()));
             }
         }
-        private void OnCancel()
+        private void Cancel()
         {
             m_model.ReloadSettings();
             m_window.Close();
