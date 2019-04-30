@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net.Sockets;
 using System.Windows.Input;
 
 namespace FlightSimulator.Model
@@ -10,6 +7,7 @@ namespace FlightSimulator.Model
     public class CommandHandler : ICommand
     {
         private Action _action;
+
         public CommandHandler(Action action)
         {
             _action = action;
@@ -17,10 +15,14 @@ namespace FlightSimulator.Model
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            if (_action != null)
+                return true;
+            return false;
         }
 
+#pragma warning disable CS0067 // The event 'CommandHandler.CanExecuteChanged' is never used
         public event EventHandler CanExecuteChanged;
+#pragma warning restore CS0067 // The event 'CommandHandler.CanExecuteChanged' is never used
 
         public void Execute(object parameter)
         {
