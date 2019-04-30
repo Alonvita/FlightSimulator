@@ -31,19 +31,19 @@
                     Maximum="1"
                     TickFrequency="2"
                     TickPlacement="BottomRight"
-                    ValueChanged="throttleSlider_ValueChanged"
+                    ValueChanged="ThrottleSlider_ValueChanged"
                     Orientation="Vertical" Width="23"/>
                     </StackPanel>
                 </Button>
                 <Button DockPanel.Dock="Top" Height="40" Margin="0,0,50,0">Aileron</Button>
                 <Button DockPanel.Dock="Right" Width="50" Margin="0,0,0,49">
                     <TextBlock 
-                x:Name="Elevator" 
-                TextWrapping="Wrap"
-                Text="Elevator" 
-                RenderTransformOrigin="0.5,0.5" 
-                Width="73"
-                Margin="-108,0">
+                    x:Name="ElevatorText" 
+                    TextWrapping="Wrap"
+                    Text="Elevator" 
+                    RenderTransformOrigin="0.5,0.5" 
+                    Width="73"
+                    Margin="-108,0">
                         <TextBlock.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -69,7 +69,7 @@
                     Maximum="1"
                     TickFrequency="2"
                     TickPlacement="BottomRight"
-                    ValueChanged="elevatorSlider_ValueChanged"/>
+                    ValueChanged="ElevatorSlider_ValueChanged"/>
                     </StackPanel>
                 </Button>
                 <Button>
@@ -185,7 +185,7 @@
                                 </Canvas.RenderTransform>
                                 <Canvas.Resources>
 
-                                    <Storyboard x:Key="CenterKnob" Name="centerKnob" Completed="centerKnob_Completed">
+                                    <Storyboard x:Key="CenterKnob" Name="centerKnob" Completed="CenterKnob_Completed">
 
                                         <DoubleAnimation Storyboard.TargetName="knobPosition"
                              Storyboard.TargetProperty="X" To="0" Duration="0:0:0.2">

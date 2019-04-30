@@ -7,6 +7,48 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Image x:Name="Flight_Simulator_Background_png" Source="Flight Simulator Background.png" Stretch="Fill"/>
+
+        <Image 
+            x:Name="Flight_Simulator_Logo_png" 
+            Margin="146,40,146,0" 
+            Source="Flight Simulator Logo.png" 
+            Stretch="Fill" 
+            Width="500"
+            Height="100" 
+            VerticalAlignment="Top"/>
+        <Button
+            x:Name="Exit" 
+            Content="Exit" 
+            VerticalAlignment="Bottom" 
+            Margin="306.66,0,363.66,78.788"
+            Click="Exit_Clicked" 
+            HorizontalAlignment="Center" 
+            Width="121.68" 
+            UseLayoutRounding="False" 
+            BorderBrush="#FF3A3030" 
+            Height="32.384" 
+            FontSize="20" Background="#FFDDDDDD">
+            <Button.Effect>
+                <DropShadowEffect Opacity="0.55"/>
+            </Button.Effect>
+        </Button>
+        <Button
+            x:Name="Start" 
+            Content="Start" 
+            VerticalAlignment="Top" 
+            Margin="306.66,170.481,363.66,0"
+            Click="Start_Clicked" 
+            HorizontalAlignment="Center" 
+            Width="121.68" 
+            UseLayoutRounding="False" 
+            BorderBrush="#FF3A3030" 
+            Height="32.384" 
+            FontSize="20" Background="#FFDDDDDD">
+            <Button.Effect>
+                <DropShadowEffect Opacity="0.55"/>
+            </Button.Effect>
+        </Button>
+
     </Grid>
 </Window>
