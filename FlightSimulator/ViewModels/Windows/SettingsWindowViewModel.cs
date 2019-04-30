@@ -1,64 +1,66 @@
 ﻿using FlightSimulator.Model;
 using FlightSimulator.Model.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
 namespace FlightSimulator.ViewModels.Windows
 {
-    public class SettingsWindowViewModel : BaseNotify
+
+    public class SettingsWindowViewModel : BaseNotif
     {
-        private ISettingsModel model;
+        private ISettingsModel m_model;
+        private Window m_window;
 
         public SettingsWindowViewModel(ISettingsModel model)
         {
-            this.model = model;
+            m_model = model;
+        }
+
+        public void setWindow(Window w)
+        {
+            m_window = w;
         }
 
         public string FlightServerIP
         {
-            get { return model.FlightServerIP; }
+            get { return m_model.FlightServerIP; }
             set
             {
-                model.FlightServerIP = value;
+                m_model.FlightServerIP = value;
                 NotifyPropertyChanged("FlightServerIP");
             }
         }
 
         public int FlightCommandPort
         {
-            get { return model.FlightCommandPort; }
+            get { return m_model.FlightCommandPort; }
             set
             {
-                model.FlightCommandPort = value;
+                m_model.FlightCommandPort = value;
                 NotifyPropertyChanged("FlightCommandPort");
             }
         }
 
         public int FlightInfoPort
         {
-            get { return model.FlightInfoPort; }
+            get { return m_model.FlightInfoPort; }
             set
             {
-                model.FlightInfoPort = value;
+                m_model.FlightInfoPort = value;
                 NotifyPropertyChanged("FlightInfoPort");
             }
         }
 
-     
+
 
         public void SaveSettings()
         {
-            model.SaveSettings();
+            m_model.SaveSettings();
         }
 
         public void ReloadSettings()
         {
-            model.ReloadSettings();
+            m_model.ReloadSettings();
         }
 
         #region Commands
@@ -73,7 +75,8 @@ namespace FlightSimulator.ViewModels.Windows
         }
         private void OnClick()
         {
-            model.SaveSettings();
+            m_model.SaveSettings();
+            m_window.Close();
         }
         #endregion
 
@@ -88,10 +91,10 @@ namespace FlightSimulator.ViewModels.Windows
         }
         private void OnCancel()
         {
-            model.ReloadSettings();
+            m_model.ReloadSettings();
+            m_window.Close();
         }
         #endregion
         #endregion
     }
 }
-

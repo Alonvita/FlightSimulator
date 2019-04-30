@@ -70,15 +70,15 @@ namespace FlightSimulator
 
     public class FlightBoardVMSingelton
     {
-        private static FlightBoardViewModel _instance = null;
+        private static FlightBoardVM _instance = null;
 
-        public static FlightBoardViewModel Instance
+        public static FlightBoardVM Instance
         {
             private set { }
             get
             {
                 if (_instance == null)
-                    _instance = new FlightBoardViewModel();
+                    _instance = new FlightBoardVM();
                 return _instance;
             }
         }

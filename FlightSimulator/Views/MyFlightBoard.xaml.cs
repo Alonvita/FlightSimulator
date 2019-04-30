@@ -14,7 +14,7 @@ namespace FlightSimulator.Views
         {
             InitializeComponent();
             FlightBoardVMSingelton.Instance.PropertyChanged += FlightBoardResource.Vm_PropertyChanged;
-            this.DataContext = FlightBoardVMSingelton.Instance;
+            DataContext = FlightBoardVMSingelton.Instance;
         }
 
         private void Connect_Click(object sender, RoutedEventArgs e)
