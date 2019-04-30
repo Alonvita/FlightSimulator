@@ -24,7 +24,7 @@ namespace FlightSimulator.Views
     {
         /// <summary>Current Aileron</summary>
         public static readonly DependencyProperty AileronProperty =
-            DependencyProperty.Register("Aileron", typeof(double), typeof(Joystick),null);
+            DependencyProperty.Register("Aileron", typeof(double), typeof(Joystick), null);
 
         /// <summary>Current Elevator</summary>
         public static readonly DependencyProperty ElevatorProperty =
@@ -37,6 +37,7 @@ namespace FlightSimulator.Views
         /// <summary>How often should be raised StickMove event in Elevator units</summary>
         public static readonly DependencyProperty ElevatorStepProperty =
             DependencyProperty.Register("ElevatorStep", typeof(double), typeof(Joystick), new PropertyMetadata(1.0));
+
 
         /* Unstable - needs work */
         ///// <summary>Indicates whether the joystick knob resets its place after being released</summary>
@@ -79,29 +80,28 @@ namespace FlightSimulator.Views
             }
         }
 
-        /// <summary>Indicates whether the joystick knob resets its place after being released</summary>
-        //public bool ResetKnobAfterRelease
-        //{
-        //    get { return Convert.ToBoolean(GetValue(ResetKnobAfterReleaseProperty)); }
-        //    set { SetValue(ResetKnobAfterReleaseProperty, value); }
-        //}
-
-        /// <summary>Delegate holding data for joystick state change</summary>
-        /// <param name="sender">The object that fired the event</param>
-        /// <param name="args">Holds new values for Aileron and Elevator</param>
+        /// <summary>
+        /// OnScreenJoystickEventHandler(Joystick sender, VirtualJoystickEventArgs args).
+        ///     Delegate holding data for joystick state change
+        /// </summary>
+        /// <param name="sender"> event's sender </param>
+        /// <param name="args"> arguments </param>
         public delegate void OnScreenJoystickEventHandler(Joystick sender, VirtualJoystickEventArgs args);
 
-        /// <summary>Delegate for joystick events that hold no data</summary>
+        /// <summary>
+        /// EmptyJoystickEventHandler(Joystick sender).
+        ///     Delegate for joystick events that hold no data
+        /// </summary>
         /// <param name="sender">The object that fired the event</param>
         public delegate void EmptyJoystickEventHandler(Joystick sender);
 
-        /// <summary>This event fires whenever the joystick moves</summary>
+        /// <summary>update when hoystick moves</summary>
         public event OnScreenJoystickEventHandler Moved;
 
-        /// <summary>This event fires once the joystick is released and its position is reset</summary>
+        /// <summary> update when joystick is released, and position is set </summary>
         public event EmptyJoystickEventHandler Released;
 
-        /// <summary>This event fires once the joystick is captured</summary>
+        /// <summary> update joystick pos captured </summary>
         public event EmptyJoystickEventHandler Captured;
 
         private Point _startPos;
@@ -109,6 +109,9 @@ namespace FlightSimulator.Views
         private double canvasWidth, canvasHeight;
         private readonly Storyboard centerKnob;
 
+        /// <summary>
+        /// Joystick().
+        /// </summary>
         public Joystick()
         {
             InitializeComponent();
@@ -116,10 +119,14 @@ namespace FlightSimulator.Views
             Knob.MouseLeftButtonDown += Knob_MouseLeftButtonDown;
             Knob.MouseLeftButtonUp += Knob_MouseLeftButtonUp;
             Knob.MouseMove += Knob_MouseMove;
-
             centerKnob = Knob.Resources["CenterKnob"] as Storyboard;
         }
 
+        /// <summary>
+        /// Knob_MouseLeftButtonDown(object sender, MouseButtonEventArgs e).
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">args</param>
         private void Knob_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _startPos = e.GetPosition(Base);
@@ -132,11 +139,13 @@ namespace FlightSimulator.Views
             centerKnob.Stop();
         }
 
+        /// <summary>
+        /// Knob_MouseMove(object sender, MouseEventArgs e).
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">args</param>
         private void Knob_MouseMove(object sender, MouseEventArgs e)
         {
-            ///!!!!!!!!!!!!!!!!!
-            /// YOU MUST CHANGE THE FUNCTION!!!!
-            ///!!!!!!!!!!!!!!
             if (!Knob.IsMouseCaptured) return;
 
             Point newPos = e.GetPosition(Base);
@@ -146,8 +155,8 @@ namespace FlightSimulator.Views
             double distance = Math.Round(Math.Sqrt(deltaPos.X * deltaPos.X + deltaPos.Y * deltaPos.Y));
             if (distance >= canvasWidth / 2 || distance >= canvasHeight / 2)
                 return;
-            Aileron = -deltaPos.Y;
-            Elevator = deltaPos.X;
+            Aileron = deltaPos.X / 124;
+            Elevator = -deltaPos.Y / 124;
 
             knobPosition.X = deltaPos.X;
             knobPosition.Y = deltaPos.Y;
@@ -161,33 +170,23 @@ namespace FlightSimulator.Views
             _prevElevator = Elevator;
 
         }
-        
-        private void ThrottleSlider_ValueChanged(object sender, System.EventArgs e)
-        {
-            return;
-        }
 
-        private void ElevatorSlider_ValueChanged(object sender, System.EventArgs e)
-        {
-            return;
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-
-        }
-
+        /// <summary>
+        /// Knob_MouseLeftButtonUp(object sender, MouseButtonEventArgs e).
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">args</param>
         private void Knob_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             Knob.ReleaseMouseCapture();
             centerKnob.Begin();
         }
 
+        /// <summary>
+        /// CenterKnob_Completed(object sender, EventArgs e).
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">args</param>
         private void CenterKnob_Completed(object sender, EventArgs e)
         {
             Aileron = Elevator = _prevAileron = _prevElevator = 0;
