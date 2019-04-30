@@ -1,9 +1,4 @@
 ﻿using FlightSimulator.Model.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlightSimulator.Model
 {
@@ -15,7 +10,7 @@ namespace FlightSimulator.Model
         {
             get
             {
-                if(m_Instance == null)
+                if (m_Instance == null)
                 {
                     m_Instance = new ApplicationSettingsModel();
                 }
