@@ -25,10 +25,17 @@ namespace FlightSimulator.Views
     /// </summary>
     public partial class FlightBoard : UserControl
     {
+        List<Window> _children = null;
         ObservableDataSource<Point> planeLocations = null;
-        public FlightBoard()
+        public Window ParentControl { get; set; }
+
+        public FlightBoard(Window parent)
         {
             InitializeComponent();
+
+            ParentControl = parent;
+
+            _children = new List<Window>();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -49,6 +56,28 @@ namespace FlightSimulator.Views
             }
         }
 
+        private void Open_Settings_Window(object sender, RoutedEventArgs e)
+        {
+            // add a new settings window ptr to children
+            _children.Add(new Settings(this));
+
+            // show the window
+            _children.Last().Show();
+        }
+
+        public void Back_To_Main_Window(object sender, RoutedEventArgs e)
+        {
+            // close all children if there's exist any
+            foreach(Window w in _children)
+            {
+                w.Close();
+            }
+
+            // need to clear the content of this window
+
+
+            ParentControl.Show();
+        }
     }
 
 }

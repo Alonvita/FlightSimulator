@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using FlightSimulator.Views;
 
 namespace FlightSimulator
 {
@@ -23,6 +24,18 @@ namespace FlightSimulator
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Start_Clicked(object sender, RoutedEventArgs e)
+        {
+            FlightBoard f = new FlightBoard(this);
+            this.AddChild(f);
+        }
+
+        private void Exit_Clicked(object sender, RoutedEventArgs e)
+        {
+            // Close the window
+            Close();
         }
     }
 }

@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:FlightSimulator.Views"
              mc:Ignorable="d"
              d:DesignHeight="500" d:DesignWidth="800" Loaded="UserControl_Loaded">
-    <Grid>
+    <Grid Margin="0,0,0,74">
         <Grid.Resources>
             <Style TargetType="TextBlock" x:Key="LabelStyle">
                 <Setter Property="FontSize" Value="20" />
@@ -29,10 +29,10 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <TextBlock Style="{StaticResource LabelStyle}" LayoutTransform="{StaticResource rotate}" VerticalAlignment="Center" Grid.ColumnSpan="3" Margin="0,194" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">Lon</TextBlock>
-        <d3:ChartPlotter Grid.Row="0" Grid.Column="3" LegendVisible="False" Name="plotter" Margin="0,35,31,0"/>
+        <d3:ChartPlotter Grid.Row="0" Grid.Column="3" LegendVisible="False" Name="plotter" Margin="0,35,31,35"/>
         <TextBlock Grid.Row="1" Style="{StaticResource LabelStyle}" HorizontalAlignment="Center" Grid.Column="3" Margin="351,4,385,4">Lat</TextBlock>
         <Button x:Name="Connect" Content="Connect" Grid.Column="3" HorizontalAlignment="Left" Margin="243,10,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="Settings" Content="Settings" Grid.Column="3" Margin="380,10,310,0" VerticalAlignment="Top"/>
+        <Button x:Name="Settings" Content="Settings" Grid.Column="3" Margin="380,10,310,0" VerticalAlignment="Top" Click="Open_Settings_Window"/>
         <Button x:Name="button" Grid.Column="3" HorizontalAlignment="Right" Height="20" Margin="0,44,45,0" VerticalAlignment="Top" Width="67" FontFamily="Century Schoolbook">
             <Button.Effect>
                 <DropShadowEffect Opacity="0.73"/>
@@ -42,5 +42,12 @@
                 <TextBlock>Route</TextBlock>
             </StackPanel>
         </Button>
+        <Button 
+            x:Name="Back" 
+            Content="Back" 
+            Grid.Column="3" 
+            Margin="311,0,381,8" 
+            VerticalAlignment="Bottom" 
+            Click="Back_To_Main_Window"/>
     </Grid>
 </UserControl>
