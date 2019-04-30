@@ -1,19 +1,9 @@
-﻿using FlightSimulator.Model.EventArgs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
+using System.Windows.Controls;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using FlightSimulator.Model.EventArgs;
 
 namespace FlightSimulator.Views
 {
@@ -36,13 +26,7 @@ namespace FlightSimulator.Views
 
         /// <summary>How often should be raised StickMove event in Elevator units</summary>
         public static readonly DependencyProperty ElevatorStepProperty =
-            DependencyProperty.Register("ElevatorStep", typeof(double), typeof(Joystick), new PropertyMetadata(1.0));
-
-
-        /* Unstable - needs work */
-        ///// <summary>Indicates whether the joystick knob resets its place after being released</summary>
-        //public static readonly DependencyProperty ResetKnobAfterReleaseProperty =
-        //    DependencyProperty.Register(nameof(ResetKnobAfterRelease), typeof(bool), typeof(VirtualJoystick), new PropertyMetadata(true));
+            DependencyProperty.Register("ElevatorStep", typeof(double), typeof(Joystick), new PropertyMetadata(1.0))
 
         /// <summary>Current Aileron in degrees from 0 to 360</summary>
         public double Aileron
@@ -104,10 +88,10 @@ namespace FlightSimulator.Views
         /// <summary> update joystick pos captured </summary>
         public event EmptyJoystickEventHandler Captured;
 
-        private Point _startPos;
-        private double _prevAileron, _prevElevator;
-        private double canvasWidth, canvasHeight;
-        private readonly Storyboard centerKnob;
+        private Point m_startPos;
+        private double m_prevAileron, m_prevElevator;
+        private double m_canvasWidth, m_canvasHeight;
+        private readonly Storyboard m_centerKnob;
 
         /// <summary>
         /// Joystick().
@@ -119,7 +103,7 @@ namespace FlightSimulator.Views
             Knob.MouseLeftButtonDown += Knob_MouseLeftButtonDown;
             Knob.MouseLeftButtonUp += Knob_MouseLeftButtonUp;
             Knob.MouseMove += Knob_MouseMove;
-            centerKnob = Knob.Resources["CenterKnob"] as Storyboard;
+            m_centerKnob = Knob.Resources["CenterKnob"] as Storyboard;
         }
 
         /// <summary>
@@ -129,14 +113,14 @@ namespace FlightSimulator.Views
         /// <param name="e">args</param>
         private void Knob_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            _startPos = e.GetPosition(Base);
-            _prevAileron = _prevElevator = 0;
-            canvasWidth = Base.ActualWidth - KnobBase.ActualWidth;
-            canvasHeight = Base.ActualHeight - KnobBase.ActualHeight;
+            m_startPos = e.GetPosition(Base);
+            m_prevAileron = m_prevElevator = 0;
+            m_canvasWidth = Base.ActualWidth - KnobBase.ActualWidth;
+            m_canvasHeight = Base.ActualHeight - KnobBase.ActualHeight;
             Captured?.Invoke(this);
             Knob.CaptureMouse();
 
-            centerKnob.Stop();
+            m_centerKnob.Stop();
         }
 
         /// <summary>
@@ -146,28 +130,35 @@ namespace FlightSimulator.Views
         /// <param name="e">args</param>
         private void Knob_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!Knob.IsMouseCaptured) return;
-
-            Point newPos = e.GetPosition(Base);
-
-            Point deltaPos = new Point(newPos.X - _startPos.X, newPos.Y - _startPos.Y);
-
-            double distance = Math.Round(Math.Sqrt(deltaPos.X * deltaPos.X + deltaPos.Y * deltaPos.Y));
-            if (distance >= canvasWidth / 2 || distance >= canvasHeight / 2)
+            if (!Knob.IsMouseCaptured)
                 return;
-            Aileron = deltaPos.X / 124;
-            Elevator = -deltaPos.Y / 124;
 
-            knobPosition.X = deltaPos.X;
-            knobPosition.Y = deltaPos.Y;
+            Point newPosition = e.GetPosition(Base);
+
+            Point positionDelta = new Point(newPosition.X - m_startPos.X, newPosition.Y - m_startPos.Y);
+
+            double distance = 
+                Math.Round(
+                    Math.Sqrt(
+                        positionDelta.X * positionDelta.X + 
+                        positionDelta.Y * positionDelta.Y));
+
+            if (distance >= m_canvasWidth / 2 || distance >= m_canvasHeight / 2)
+                return;
+
+            Aileron = positionDelta.X / 124;
+            Elevator = -positionDelta.Y / 124;
+
+            knobPosition.X = positionDelta.X;
+            knobPosition.Y = positionDelta.Y;
 
             if (Moved == null ||
-                (!(Math.Abs(_prevAileron - Aileron) > AileronStep) && !(Math.Abs(_prevElevator - Elevator) > ElevatorStep)))
+                (!(Math.Abs(m_prevAileron - Aileron) > AileronStep) && !(Math.Abs(m_prevElevator - Elevator) > ElevatorStep)))
                 return;
 
             Moved?.Invoke(this, new VirtualJoystickEventArgs { Aileron = Aileron, Elevator = Elevator });
-            _prevAileron = Aileron;
-            _prevElevator = Elevator;
+            m_prevAileron = Aileron;
+            m_prevElevator = Elevator;
 
         }
 
@@ -179,7 +170,7 @@ namespace FlightSimulator.Views
         private void Knob_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             Knob.ReleaseMouseCapture();
-            centerKnob.Begin();
+            m_centerKnob.Begin();
         }
 
         /// <summary>
@@ -189,7 +180,11 @@ namespace FlightSimulator.Views
         /// <param name="e">args</param>
         private void CenterKnob_Completed(object sender, EventArgs e)
         {
-            Aileron = Elevator = _prevAileron = _prevElevator = 0;
+            Aileron = 0;
+            Elevator = 0;
+            m_prevAileron = 0;
+            m_prevElevator = 0;
+
             Released?.Invoke(this);
         }
 

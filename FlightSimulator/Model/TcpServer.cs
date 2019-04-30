@@ -10,27 +10,28 @@ namespace FlightSimulator.Model
 {
     public class TcpServer : IServer
     {
-        private int port;
-        private Thread thread = null;
-        private string _data;
+        private static int BUFFER_SIZE = 1024;
+        private int m_port;
+        private Thread m_thread = null;
+        private string m_data;
         //Notify about data from the simulator
         public string Data
         {
-            get { return _data; }
-            set { _data = value; NotifyPropertyChanged("Data"); }
+            get { return m_data; }
+            set { m_data = value; NotifyPropertyChanged("Data"); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void RunServer(int port)
         {
-            this.port = port;
+            this.m_port = port;
             try
             {
                 // open the thread that the commands will be on a different thread
-                thread = new Thread(paradicat);
-                thread.IsBackground = true;
-                thread.Start();
+                m_thread = new Thread(Predicat);
+                m_thread.IsBackground = true;
+                m_thread.Start();
             }
             catch (Exception e)
             {
@@ -38,27 +39,29 @@ namespace FlightSimulator.Model
             }
         }
 
-        private void paradicat(object obj)
+        private void Predicat(object obj)
         {
-            TcpClient tcpclient = null;
-            NetworkStream netstream = null;
-            var listener = new TcpListener(IPAddress.Any, port);
+            TcpClient tcpClient = null;
+            NetworkStream netStream = null;
+            var listener = new TcpListener(IPAddress.Any, m_port);
+
             listener.Start();
-            tcpclient = listener.AcceptTcpClient();
-            netstream = tcpclient.GetStream();
-            Console.WriteLine("The simulator is connected!");
+            tcpClient = listener.AcceptTcpClient();
+            netStream = tcpClient.GetStream();
+            Console.WriteLine("Flight simulator is connected!");
+
             while (true)
             {
                 try
                 {
-                    if (TcpServerUtils.GetState(tcpclient) == System.Net.NetworkInformation.TcpState.Closed)
+                    if (TcpServerUtils.GetState(tcpClient) == System.Net.NetworkInformation.TcpState.Closed)
                     {
                         Console.WriteLine("Client disconnected gracefully");
                         break;
                     }
 
 
-                    Data = Read(netstream);
+                    Data = ReadStream(netStream);
                 }
                 catch (ObjectDisposedException)
                 {
@@ -66,36 +69,39 @@ namespace FlightSimulator.Model
                 }
             }
 
-            tcpclient.Close();
-            netstream.Close();
+            tcpClient.Close();
+            netStream.Close();
             listener.Stop();
-            tcpclient.Dispose();
-            netstream.Dispose();
+            tcpClient.Dispose();
+            netStream.Dispose();
         }
 
         //check if the tcp connection is closed
-        private bool IsDisconnected(TcpClient tcp)
+        private bool IsConnected(TcpClient tcp)
         {
             if (tcp.Client.Poll(0, SelectMode.SelectRead))
             {
                 byte[] buff = new byte[1];
                 if (tcp.Client.Receive(buff, SocketFlags.Peek) == 0)
-                    return true;
+                    return false;
             }
-            return false;
+
+            return true;
         }
 
         private void NotifyPropertyChanged(string v)
         {
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(v));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(v));
         }
+
         //Read data stream and decode is
-        private string Read(NetworkStream netstream)
+        private string ReadStream(NetworkStream netstream)
         {
-            byte[] buffer = new byte[1024];
-            int dataread = netstream.Read(buffer, 0, buffer.Length);
-            string stringread = Encoding.UTF8.GetString(buffer, 0, dataread);
+            byte[] buff = new byte[BUFFER_SIZE];
+
+            int dataread = netstream.Read(buff, 0, buff.Length);
+            string stringread = Encoding.UTF8.GetString(buff, 0, dataread);
+
             return stringread;
         }
     }

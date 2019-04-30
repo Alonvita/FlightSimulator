@@ -1,53 +1,53 @@
-using FlightSimulator.ViewModels;
 using FlightSimulator.Model;
+using FlightSimulator.ViewModels;
 using FlightSimulator.ViewModels.Windows;
 
 namespace FlightSimulator
 {
     public class InfoSingleton
     {
-        private static TcpServer _instance = null;
+        private static TcpServer m_instance = null;
 
         public static TcpServer Instance
         {
             private set { }
             get
             {
-                if (_instance == null)
-                    _instance = new TcpServer();
-                return _instance;
+                if (m_instance == null)
+                    m_instance = new TcpServer();
+                return m_instance;
             }
         }
     }
 
     public class CommandSingleton
     {
-        private static Client _instance = null;
+        private static Client m_instance = null;
 
         public static Client Instance
         {
             private set { }
             get
             {
-                if (_instance == null)
-                    _instance = new Client();
-                return _instance;
+                if (m_instance == null)
+                    m_instance = new Client();
+                return m_instance;
             }
         }
     }
 
     public class FlightBoardModelSingelton
     {
-        private static FlightBoardModel _instance = null;
+        private static FlightBoardModel m_instance = null;
 
         public static FlightBoardModel Instance
         {
             private set { }
             get
             {
-                if (_instance == null)
-                    _instance = new FlightBoardModel();
-                return _instance;
+                if (m_instance == null)
+                    m_instance = new FlightBoardModel();
+                return m_instance;
             }
         }
     }
@@ -70,16 +70,16 @@ namespace FlightSimulator
 
     public class FlightBoardVMSingelton
     {
-        private static FlightBoardVM _instance = null;
+        private static FlightBoardVM m_instance = null;
 
         public static FlightBoardVM Instance
         {
             private set { }
             get
             {
-                if (_instance == null)
-                    _instance = new FlightBoardVM();
-                return _instance;
+                if (m_instance == null)
+                    m_instance = new FlightBoardVM();
+                return m_instance;
             }
         }
     }
@@ -102,32 +102,32 @@ namespace FlightSimulator
 
     public class MainWindowVMSingelton
     {
-        private static MainWindowViewModel _instance = null;
+        private static MainWindowViewModel m_instance = null;
 
         public static MainWindowViewModel Instance
         {
             private set { }
             get
             {
-                if (_instance == null)
-                    _instance = new MainWindowViewModel();
-                return _instance;
+                if (m_instance == null)
+                    m_instance = new MainWindowViewModel();
+                return m_instance;
             }
         }
     }
 
     public class MySettingVMSingelton
     {
-        private static SettingsWindowViewModel _instance = null;
+        private static SettingsWindowViewModel m_instance = null;
 
         public static SettingsWindowViewModel Instance
         {
             private set { }
             get
             {
-                if (_instance == null)
-                    _instance = new SettingsWindowViewModel(ApplicationSettingsModel.Instance);
-                return _instance;
+                if (m_instance == null)
+                    m_instance = new SettingsWindowViewModel(ApplicationSettingsModel.Instance);
+                return m_instance;
             }
         }
     }

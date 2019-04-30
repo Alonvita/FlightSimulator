@@ -11,7 +11,7 @@ namespace FlightSimulator.Views
         {
             InitializeComponent();
             this.DataContext = MySettingVMSingelton.Instance;
-            MySettingVMSingelton.Instance.setWindow(this);
+            MySettingVMSingelton.Instance.SetWindow(this);
         }
 
     }

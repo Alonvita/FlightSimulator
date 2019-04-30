@@ -27,7 +27,7 @@
         <TextBox x:Name="InfoPort" Grid.Row="1" Grid.Column="1" Height="20" VerticalAlignment="Center" Text="{Binding FlightInfoPort}"/>
         <TextBlock VerticalAlignment="Center" Grid.Row="2" Margin="5"> Flight Command Port:</TextBlock>
         <TextBox x:Name="CommandPort" Grid.Row="2" Grid.Column="1" Height="20" VerticalAlignment="Center" Text="{Binding FlightCommandPort}"/>
-        <Button Style ="{StaticResource ResourceKey=StandardButton}" Name ="OK" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0" Content="OK"  Margin="0,50,30,0" Command="{Binding ClickCommand}"/>
-        <Button Style ="{StaticResource ResourceKey=StandardButton}" Name ="Cancel" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="1" Content="Cancel" Margin="30,50,0,0" Command="{Binding CancelCommand}"/>
+        <Button Style ="{StaticResource ResourceKey=StandardButton}" Name ="OK" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0" Content="OK"  Margin="0,50,30,0" Command="{Binding OnClickCommand}"/>
+        <Button Style ="{StaticResource ResourceKey=StandardButton}" Name ="Cancel" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="1" Content="Cancel" Margin="30,50,0,0" Command="{Binding OnCancelCommand}"/>
     </Grid>
 </Window>

@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using FlightSimulator.Model;
+
 namespace FlightSimulator.Views
 {
     /// <summary>
@@ -9,7 +8,6 @@ namespace FlightSimulator.Views
     /// </summary>
     public partial class MyFlightBoard : UserControl
     {
-
         public MyFlightBoard()
         {
             InitializeComponent();
@@ -22,5 +20,9 @@ namespace FlightSimulator.Views
             Connect.IsEnabled = false;
         }
 
+        private void FlightBoardResource_Loaded(object sender, RoutedEventArgs e)
+        {
+            return;
+        }
     }
 }
