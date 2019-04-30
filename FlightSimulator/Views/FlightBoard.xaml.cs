@@ -35,7 +35,7 @@ namespace FlightSimulator.Views
                 switch (first)
                 {
                     case 0:
-                        var _fbViewModel = sender as FlightBoardViewModel;
+                        var _fbViewModel = sender as FlightBoardVM;
                         Point p1 = new Point(_fbViewModel.Lat, _fbViewModel.Lon);
                         planeLocations.AppendAsync(Dispatcher, p1);
                         break;

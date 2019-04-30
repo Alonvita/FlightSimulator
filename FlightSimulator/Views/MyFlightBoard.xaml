@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="FlightSimulator.Views.Manual"
+﻿<UserControl x:Class="FlightSimulator.Views.MyFlightBoard"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,52 +6,39 @@
              xmlns:local="clr-namespace:FlightSimulator.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="450">
+
     <Grid>
-        <Grid.Resources>
-            <Style TargetType="TextBlock" x:Key="LabelStyle">
-                <Setter Property="FontSize" Value="20" />
-                <Setter Property="HorizontalAlignment" Value="Center" />
-                <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="Foreground" Value="Black" />
-                <Setter Property="Margin" Value="4" />
-            </Style>
-            <RotateTransform x:Key="rotate" Angle="90"/>
-        </Grid.Resources>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Style="{StaticResource LabelStyle}" LayoutTransform="{StaticResource rotate}" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1">elevator</TextBlock>
-        <DockPanel HorizontalAlignment="Center" Grid.Column="1" Grid.Row="0">
-            <Label FontWeight="Bold" HorizontalAlignment="Center" FontSize="16">aileron</Label>
-        </DockPanel>
-        <TextBlock Text="{Binding ElementName=Joy, Path=Elevator, StringFormat=0.0#}" 
-               VerticalAlignment="Top"  Grid.Row="1" Grid.Column="2"  LayoutTransform="{StaticResource rotate}"  Margin="0,30,0,0" HorizontalAlignment="Center" FontWeight="Bold"  FontSize="16"/>
-        <TextBlock Text="{Binding ElementName=Joy, Path=Aileron, StringFormat=0.0#}" 
-                 Margin="0,0,30,0"   HorizontalAlignment="Right"  Grid.Row="0" FontWeight="Bold" Grid.Column="1" FontSize="16"/>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="10">
+            <Button x:Name="Connect"
+                Content="Connect"
+                Click="Connect_Click"
+                ClickMode="Press"  
+                Margin="0,0,10,0"
+                    Height="20"
+                    Width="75"
+                HorizontalAlignment="Center"
+                TextElement.FontWeight="Bold"
+                Foreground="Gray"
+                Command="{Binding ConnectCommand}"/>
 
-
-        <DockPanel Grid.Column="0" Grid.Row="1" LayoutTransform="{StaticResource rotate}">
-            <Label DockPanel.Dock="Bottom" FontWeight="Bold" HorizontalAlignment="Center" FontSize="16">throttle</Label>
-            <TextBlock Text="{Binding ElementName=throttle_bar, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Left" TextAlignment="Center" Margin="0,0,10,10" FontSize="16" FontWeight="Bold"/>
-            <Slider x:Name="throttle_bar" IsSnapToTickEnabled="True" Minimum="0" Maximum="1" Value="{Binding Throttle, Mode=OneWayToSource}" TickFrequency="0.1" Width="Auto" TickPlacement="Both"/>
-        </DockPanel>
-
-        <DockPanel VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" Margin="10">
-            <Label DockPanel.Dock="Bottom" FontWeight="Bold" Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" Margin="-30" FontSize="16">rudder</Label>
-            <TextBlock Text="{Binding ElementName=rudder_bar, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Margin="0,10,0,0" FontSize="16" FontWeight="Bold"/>
-
-        </DockPanel>
-        <DockPanel VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" Margin="10">
-            <Slider x:Name="rudder_bar"  IsSnapToTickEnabled="True" Orientation="Horizontal" Minimum="-1" Maximum="1" Value="{Binding Rudder, Mode=OneWayToSource}" TickFrequency="0.1" Height="68"  TickPlacement="Both"/>
-        </DockPanel>
-        <local:Joystick x:Name="Joy" Grid.Column="1" Grid.Row="1" Aileron="{Binding Aileron, Mode=OneWayToSource}"
-                            Elevator="{Binding Elevator, Mode=OneWayToSource}" ></local:Joystick>
+            <Button x:Name="Settings"
+                    Content="Settings"
+                    ClickMode="Press"
+                    Height="20"
+                    TextElement.FontWeight="Bold"
+                    Width="75"
+                    HorizontalAlignment="Center"
+                    Foreground="Gray"
+					Command="{Binding SettingsCommand}"/>
+        </StackPanel>
+        <local:FlightBoard HorizontalAlignment="Center" Grid.ColumnSpan="2" Grid.Row="1" Margin="10" x:Name="FlightBoardResource"/>
     </Grid>
 </UserControl>
