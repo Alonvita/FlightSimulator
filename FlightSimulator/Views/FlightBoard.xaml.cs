@@ -1,19 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using FlightSimulator.Model;
 using FlightSimulator.ViewModels;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
@@ -25,17 +12,11 @@ namespace FlightSimulator.Views
     /// </summary>
     public partial class FlightBoard : UserControl
     {
-        List<Window> _children = null;
-        ObservableDataSource<Point> planeLocations = null;
-        public Window ParentControl { get; set; }
-
-        public FlightBoard(Window parent)
+        private int first = 1;
+        private ObservableDataSource<Point> planeLocations = null;
+        public FlightBoard()
         {
             InitializeComponent();
-
-            ParentControl = parent;
-
-            _children = new List<Window>();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -47,38 +28,23 @@ namespace FlightSimulator.Views
             plotter.AddLineGraph(planeLocations, 2, "Route");
         }
 
-        private void Vm_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        public void Vm_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if(e.PropertyName.Equals("Lat") || e.PropertyName.Equals("Lon"))
+            if (e.PropertyName.Equals("Lat") || e.PropertyName.Equals("Lon")) //set the lon and lat to the map
             {
-                Point p1 = new Point(0,0);            // Fill here!
-                planeLocations.AppendAsync(Dispatcher, p1);
+                switch (first)
+                {
+                    case 0:
+                        var _fbViewModel = sender as FlightBoardViewModel;
+                        Point p1 = new Point(_fbViewModel.Lat, _fbViewModel.Lon);
+                        planeLocations.AppendAsync(Dispatcher, p1);
+                        break;
+                    case 1:
+                        --first;
+                        break;
+                }
             }
-        }
-
-        private void Open_Settings_Window(object sender, RoutedEventArgs e)
-        {
-            // add a new settings window ptr to children
-            _children.Add(new Settings(this));
-
-            // show the window
-            _children.Last().Show();
-        }
-
-        public void Back_To_Main_Window(object sender, RoutedEventArgs e)
-        {
-            // close all children if there's exist any
-            foreach(Window w in _children)
-            {
-                w.Close();
-            }
-
-            // need to clear the content of this window
-
-
-            ParentControl.Show();
         }
     }
 
 }
-

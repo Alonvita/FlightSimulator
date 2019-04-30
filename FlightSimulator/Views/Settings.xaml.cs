@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 
 namespace FlightSimulator.Views
 {
@@ -8,19 +7,12 @@ namespace FlightSimulator.Views
     /// </summary>
     public partial class Settings : Window
     {
-        readonly UserControl mainWindow;
-
-        public Settings(UserControl _mainWindow)
+        public Settings()
         {
             InitializeComponent();
-
-            this.mainWindow = _mainWindow;
-
-            this.Height = mainWindow.Height / 2;
-            this.Width = mainWindow.Width / 2;
-
-            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            
+            this.DataContext = MySettingVMSingelton.Instance;
+            MySettingVMSingelton.Instance.setWindow(this);
         }
+
     }
 }
